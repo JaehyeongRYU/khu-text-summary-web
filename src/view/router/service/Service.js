@@ -9,22 +9,39 @@ function Service(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [textValue, setTextValue] = useState("");
     const [summarizedText, setSummarizedText] = useState('');
+    const [newsData, setNewsData] = useState([]);
+
 
     const dataParsing = (textValue) => {
-        // 숫자 제거
-        let numReg = /[0-9]/gim;
+        const sentences = textValue.split(/[.!?]/);
+        console.log(sentences)
+        // 각 문장의 중요도를 가중치로 나타내는 예시 로직
+        const sentenceWeights = sentences.map(sentence => {
+            // 여기에서 문장의 중요도를 판단하는 로직을 추가할 수 있습니다.
+            // 예를 들어 특정 키워드의 등장 여부, 문장의 길이 등을 고려할 수 있습니다.
+            return sentence.length;
+        });
+        console.log(sentenceWeights)
+        // 중요도에 따라 정렬된 문장 배열
+        const sortedSentences = sentences
+            .map((sentence, index) => ({ sentence, weight: sentenceWeights[index] }))
+            .sort((a, b) => b.weight - a.weight)
+            .map(item => item.sentence);
 
-        // 특수문자, 괄호, 점, 모두 제거
-        let specialReg= /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gim;
-
-        //정규식에 해당하는 문자를 replace 로 제거
-        let firstResultData = textValue.replace(numReg, "");
-        let secondResultData = firstResultData.replace(specialReg, "");
-        console.log(firstResultData);
-        console.log(secondResultData);
-
+        // 상위 몇 개의 문장 선택 (예: 상위 2개)
+        const summarySentences = sortedSentences.slice(0, 2);
+        console.log(summarySentences)
+        // 선택된 문장을 조합하여 요약 생성
+        const summary = summarySentences.join(' ');
+        console.log(summary)
     }
+
     const handleButtonClick = async () => {
+        if(textValue === ''){
+            return;
+        }
+
+
         // dataParsing(textValue)
         // return;
 
@@ -32,7 +49,6 @@ function Service(props) {
         await axios
             .post("http://127.0.0.1:5000/summary", {text: textValue})
             .then((response) => {
-                console.log(response)
                 setSummarizedText(response?.data?.result);
                 return;
             })
@@ -42,10 +58,28 @@ function Service(props) {
             .finally(() => setIsLoading(false))
     };
 
+    const loadNews = async () => {
+        await axios
+            .get("http://127.0.0.1:5000/news")
+            .then((response) => {
+                setNewsData(response.data);
+                return;
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+    }
+
+    useEffect( ()=> {
+        loadNews();
+    },[])
+
     return (
         <div id={"Service"}>
-
             <div className="main-content-wrapper">
+                <div className="news-wrapper">
+
+                </div>
                 <div className="user-text-wrapper">
                     <div className="title">
                         User Input
