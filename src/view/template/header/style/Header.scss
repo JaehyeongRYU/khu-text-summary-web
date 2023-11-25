@@ -23,6 +23,23 @@
         border:2px solid white;
       }
     }
+    .btn-wrapper{
+      display: flex;
+      align-items: center;
+      margin-right: 50px;
+      cursor: pointer;
+
+      .text-wrapper{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 12px;
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+    }
   }
+
 }
 

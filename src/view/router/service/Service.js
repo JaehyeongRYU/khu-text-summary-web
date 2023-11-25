@@ -11,7 +11,6 @@ function Service(props) {
     const [summarizedText, setSummarizedText] = useState('');
     const [newsData, setNewsData] = useState([]);
 
-
     const dataParsing = (textValue) => {
         const sentences = textValue.split(/[.!?]/);
         console.log(sentences)
@@ -40,7 +39,6 @@ function Service(props) {
         if(textValue === ''){
             return;
         }
-
 
         // dataParsing(textValue)
         // return;
@@ -74,59 +72,87 @@ function Service(props) {
         loadNews();
     },[])
 
+    console.log(newsData)
+
+    const clickNewsTitle = (newsContent) => {
+        props.setSelectedTab('summary')
+        setTextValue(newsContent);
+        setSummarizedText('');
+    }
+
+
     return (
         <div id={"Service"}>
-            <div className="main-content-wrapper">
-                <div className="news-wrapper">
+            {
+                props.selectedTab === 'summary' ?
+                    <div className="main-content-wrapper">
+                        <div className="user-text-wrapper">
+                            <div className="title">
+                                User Input
+                            </div>
+                            <textarea
+                                className="user-input"
+                                placeholder={'요약할 글을 입력해 보세요'}
+                                value={textValue}
+                                onChange={(e) => setTextValue(e.target.value)}
+                            />
 
-                </div>
-                <div className="user-text-wrapper">
-                    <div className="title">
-                        User Input
-                    </div>
-                    <textarea
-                        className="user-input"
-                        placeholder={'요약할 글을 입력해 보세요'}
-                        value={textValue}
-                        onChange={(e) => setTextValue(e.target.value)}
-                    />
-
-                    <div className="button-wrapper">
-                        <div className="summarize-button" onClick={() => handleButtonClick()}>
-                            요약하기
-                        </div>
-                    </div>
-                </div>
-                <div className="arrow-wrapper">
-                    <img className='right-arrow-img' alt={""} src={rightArrow}/>
-                </div>
-                <div className="model-text-wrapper">
-                    <div className="title">
-                        Model Output
-                    </div>
-                    {
-                        isLoading ?
-                            <div className={'loading-wrapper'}>
-                                <div className={'loading'}>
-                                    <ReactLoading type={'bubbles'} color={'#fa7116'}/>
+                            <div className="button-wrapper">
+                                <div className="summarize-button" onClick={() => handleButtonClick()}>
+                                    요약하기
                                 </div>
                             </div>
-                            :
-                            <>
-                                {
-                                    summarizedText !== "" ?
-                                        <div className="model-text">
-                                            {summarizedText}
+                        </div>
+                        <div className="arrow-wrapper">
+                            <img className='right-arrow-img' alt={""} src={rightArrow}/>
+                        </div>
+                        <div className="model-text-wrapper">
+                            <div className="title">
+                                Model Output
+                            </div>
+                            {
+                                isLoading ?
+                                    <div className={'loading-wrapper'}>
+                                        <div className={'loading'}>
+                                            <ReactLoading type={'bubbles'} color={'#fa7116'}/>
                                         </div>
-                                        :
-                                        <div className="model-text">
-                                            none
+                                    </div>
+                                    :
+                                    <>
+                                        {
+                                            summarizedText !== "" ?
+                                                <div className="model-text">
+                                                    {summarizedText}
+                                                </div>
+                                                :
+                                                null
+                                        }
+                                    </>
+                            }
+                        </div>
+                    </div>
+                    :
+                    <div className="main-content-wrapper">
+                        <div className="news-wrapper">
+                            {
+                                newsData.map((li,index)=>{
+                                    return(
+                                        <div className='news-box'>
+                                            <div className="news-title-wrapper" onClick={()=>clickNewsTitle(li?.news_content)}>
+                                                {li?.news_title}
+                                            </div>
+                                            <div className="news-link-wrapper" onClick={()=>window.open(li?.news_link)}>
+                                                {li?.news_link}
+                                            </div>
+
                                         </div>
-                                }
-                            </>
-                    }
-                </div>
-            </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    </div>
+
+            }
         </div>
     );
 }

@@ -12,6 +12,7 @@
     justify-content: center;
     align-content: center;
     width:100%;
+    margin: 0 auto;
     height: 80%;
     margin-top: 50px;
     background-color: white;
@@ -88,6 +89,30 @@
         object-fit: contain;
       }
     }
+    .news-wrapper{
+      display: flex;
+      flex-direction: column;
+      .news-box{
+        margin-bottom: 20px;
+        padding:20px;
+        width: 100%;
+        border:1px solid #fa7116;
+        border-radius: 12px;
+        text-align: center;
+        .news-title-wrapper{
+          cursor: pointer;
+          font-weight: bold;
+        }
+        .news-link-wrapper{
+          margin-top: 20px;
+          cursor: pointer;
+        }
+        .news-summary-wrapper{
+
+        }
+      }
+    }
+
   }
 
 }

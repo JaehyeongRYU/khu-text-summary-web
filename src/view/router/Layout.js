@@ -13,7 +13,7 @@ function Layout(props) {
 
     return (
         <>
-            <Header/>
+            <Header setSelectedTab={props.setSelectedTab}/>
             <main style={layoutStyle}>
                 <Outlet/>
             </main>
