@@ -38,16 +38,11 @@ function Service(props) {
         //입력된 회의록을 한 줄 단위로 나눈다.
         const sentences = textValue.split(/[.!?]/);
 
-        console.log(sentences)
-
         // 참석자, 회의 날짜와 같은 요약에 의미없는 데이터를 삭제한다.
         const summarySentences = sentences.slice(1, sentences.length);
         // 수정된 데이터를 다시 문단 형식으로 바꿔준다.
-        console.log(summarySentences)
-
 
         const summary = summarySentences.map(item => item + '.').join(' ');
-        console.log(summary.replace(/\n/g, ""))
 
         // 공백을 제거하여 return 한다.
         return summary.replace(/\n/g, "")
@@ -60,7 +55,6 @@ function Service(props) {
         }
 
         if (textValue.indexOf('회의') !== -1) {
-            console.log('회의록!')
             //회의록 요약
             setIsLoading(true)
             await axios
@@ -77,7 +71,6 @@ function Service(props) {
                 })
                 .finally(() => setIsLoading(false))
         } else {
-            console.log('뉴스!')
             //그 외 요약
             setIsLoading(true)
             await axios
